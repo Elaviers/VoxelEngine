@@ -1,0 +1,4 @@
+mips 5
+min linear_mipmap_nearest
+mag nearest
+img block.png
