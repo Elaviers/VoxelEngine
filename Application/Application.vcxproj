@@ -73,29 +73,29 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)Build\$(Configuration)\$(Platform)\</OutDir>
     <IntDir>$(ProjectDir)Intermediate\$(Configuration)\$(Platform)\</IntDir>
-    <IncludePath>$(SolutionDir);$(SolutionDir)Include\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Build\$(Configuration)\$(Platform)\;$(SolutionDir)Build\StaticLibs\$(Configuration)\$(Platform)\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir);$(SolutionDir)ELLib\Headers\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Build\$(Configuration)\$(Platform)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)Build\$(Configuration)\$(Platform)\</OutDir>
     <IntDir>$(ProjectDir)Intermediate\$(Configuration)\$(Platform)\</IntDir>
-    <IncludePath>$(SolutionDir);$(SolutionDir)Include\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Build\$(Configuration)\$(Platform)\;$(SolutionDir)Build\StaticLibs\$(Configuration)\$(Platform)\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir);$(SolutionDir)ELLib\Headers\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Build\$(Configuration)\$(Platform)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)Build\$(Configuration)\$(Platform)\</OutDir>
     <IntDir>$(ProjectDir)Intermediate\$(Configuration)\$(Platform)\</IntDir>
-    <IncludePath>$(SolutionDir);$(SolutionDir)Include\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Build\$(Configuration)\$(Platform)\;$(SolutionDir)Build\StaticLibs\$(Configuration)\$(Platform)\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir);$(SolutionDir)ELLib\Headers\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Build\$(Configuration)\$(Platform)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)Build\$(Configuration)\$(Platform)\</OutDir>
     <IntDir>$(ProjectDir)Intermediate\$(Configuration)\$(Platform)\</IntDir>
-    <IncludePath>$(SolutionDir);$(SolutionDir)Include\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Build\$(Configuration)\$(Platform)\;$(SolutionDir)Build\StaticLibs\$(Configuration)\$(Platform)\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir);$(SolutionDir)ELLib\Headers\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Build\$(Configuration)\$(Platform)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

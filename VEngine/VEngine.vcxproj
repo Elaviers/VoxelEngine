@@ -38,29 +38,6 @@
     <ClInclude Include="World.hpp" />
     <ClInclude Include="WorldGenerator.hpp" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ELAudio\ELAudio.vcxproj">
-      <Project>{6f48062a-bf0c-4e71-a219-7fb2130aac1b}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\ELCore\ELCore.vcxproj">
-      <Project>{90d23395-1a5c-48ae-b2aa-318fa6140cc7}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\ELGraphics\ELGraphics.vcxproj">
-      <Project>{b31b40c4-7526-4b52-96d6-7f758af87641}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\ELMaths\ELMaths.vcxproj">
-      <Project>{4a3a2fe0-b739-4091-8ee4-2c7737cb5ccf}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\ELPhys\ELPhys.vcxproj">
-      <Project>{f809e675-1b19-4c94-92ed-d923c2b9a09e}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\ELSys\ELSys.vcxproj">
-      <Project>{94421f68-e77e-4213-bd49-7624bc9eacf2}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\ELUI\ELUI.vcxproj">
-      <Project>{f2b520d1-b1e0-4148-a0e4-db8e8923533e}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{FCC87110-C77A-4D30-A1CE-665605FE0B4E}</ProjectGuid>
@@ -114,30 +91,30 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir);$(SolutionDir)Include\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Libraries\$(Configuration)\$(Platform)\;$(SolutionDir)Build\StaticLibs\$(Configuration)\$(Platform)\;$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)Build\StaticLibs\$(Configuration)\$(Platform)\</OutDir>
+    <IncludePath>$(SolutionDir);$(SolutionDir)ELLib\Headers\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)ELLib\Build\$(Configuration)\$(Platform)\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)Build\$(Configuration)\$(Platform)\</OutDir>
     <IntDir>$(ProjectDir)Intermediate\$(Configuration)\$(Platform)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir);$(SolutionDir)Include\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Libraries\$(Configuration)\$(Platform)\;$(SolutionDir)Build\StaticLibs\$(Configuration)\$(Platform)\;$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)Build\StaticLibs\$(Configuration)\$(Platform)\</OutDir>
+    <IncludePath>$(SolutionDir);$(SolutionDir)ELLib\Headers\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)ELLib\Build\$(Configuration)\$(Platform)\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)Build\$(Configuration)\$(Platform)\</OutDir>
     <IntDir>$(ProjectDir)Intermediate\$(Configuration)\$(Platform)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir);$(SolutionDir)Include\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Libraries\$(Configuration)\$(Platform)\;$(SolutionDir)Build\StaticLibs\$(Configuration)\$(Platform)\;$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)Build\StaticLibs\$(Configuration)\$(Platform)\</OutDir>
+    <IncludePath>$(SolutionDir);$(SolutionDir)ELLib\Headers\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)ELLib\Build\$(Configuration)\$(Platform)\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)Build\$(Configuration)\$(Platform)\</OutDir>
     <IntDir>$(ProjectDir)Intermediate\$(Configuration)\$(Platform)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir);$(SolutionDir)Include\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Libraries\$(Configuration)\$(Platform)\;$(SolutionDir)Build\StaticLibs\$(Configuration)\$(Platform)\;$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)Build\StaticLibs\$(Configuration)\$(Platform)\</OutDir>
+    <IncludePath>$(SolutionDir);$(SolutionDir)ELLib\Headers\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)ELLib\Build\$(Configuration)\$(Platform)\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)Build\$(Configuration)\$(Platform)\</OutDir>
     <IntDir>$(ProjectDir)Intermediate\$(Configuration)\$(Platform)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
