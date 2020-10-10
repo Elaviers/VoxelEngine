@@ -10,6 +10,7 @@ uniform bool IsFont;
 
 layout(location = 1) in vec2 UV;
 layout(location = 2) in vec4 VertexColour;
+layout(location = 6) in float depth;
 
 out vec4 OutColour;
 
@@ -36,4 +37,6 @@ void main()
 		else
 			OutColour = Colour * VertexColour * tex;
 	}
+
+	OutColour = vec4(OutColour.rgb * (1 - (depth + 1) / 300), OutColour.a);
 }

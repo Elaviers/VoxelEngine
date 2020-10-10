@@ -1,3 +1,0 @@
-ttf
-rendersize 128
-filename arial.ttf

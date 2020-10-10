@@ -6,7 +6,7 @@ void Game::_InitialiseGL()
 {
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
-	glClearColor(0.2f, 0.f, 0.f, 1.f);
+	glClearColor(0.f, 0.f, 0.f, 1.f);
 	wglSwapIntervalEXT(0);
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -80,7 +80,7 @@ int Game::Run()
 		_inst.Debug().Update(deltaSeconds);
 		_inst.GetWorld().Update(cameraFrustum, deltaSeconds);
 
-		q.ClearDynamicQueue();
+		q.Clear();
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		_shaders.lit.Use();
@@ -95,7 +95,7 @@ int Game::Run()
 		tex->Bind(0);
 		_inst.GetWorld().Draw();
 
-		q.Render(ERenderChannels::SURFACE | ERenderChannels::UNLIT, _inst.Meshes(), _inst.Textures());
+		q.Render(ERenderChannels::SURFACE | ERenderChannels::UNLIT, _inst.Meshes(), _inst.Textures(), 0);
 		_window.SwapBuffers();
 
 		deltaSeconds = timer.SecondsSinceStart();

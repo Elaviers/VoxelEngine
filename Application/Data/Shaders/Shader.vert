@@ -22,6 +22,7 @@ layout(location = 0) out vec3 WorldPosition;
 layout(location = 1) out vec2 UV;
 layout(location = 2) out vec4 VertexColour;
 layout(location = 3) out mat3 TBN;
+layout(location = 6) out float depth;
 
 void main()
 {
@@ -55,6 +56,7 @@ void main()
 
 	WorldPosition = (M_Model * vec4(position, 1)).xyz;
 	gl_Position = M_Projection * M_View * vec4(WorldPosition, 1);
+	depth = gl_Position.z;
 
 	VertexColour = VertexColour_IN;
 	UV = vec2(UV_IN.x, 1 - UV_IN.y) * UVScale + UVOffset;
