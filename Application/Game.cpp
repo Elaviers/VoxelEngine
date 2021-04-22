@@ -33,6 +33,17 @@ void Game::_Initialise()
 	_inst.Initialise();
 
 	_player.Setup(_inst.GetContext());
+
+	const int runLength = 8;
+	const int stride = runLength * THREAD_COUNT;
+	for (int i = 0; i < THREAD_COUNT; ++i)
+	{
+		_regionLoaders[i].SetQueue(&_regionWorkQueue, &_region);
+		
+		_regionLoaders[i].SetRunLength(runLength);
+		_regionLoaders[i].SetStride(stride);
+		_regionLoaders[i].SetOffset(i * runLength);
+	}
 }
 
 int Game::Run()
@@ -48,10 +59,20 @@ int Game::Run()
 	Timer timer;
 	RenderQueue q;
 
+	_region.SetWorkQueue(&_regionWorkQueue);
+	_region.SetSize(Vector3T(8));
+	_region.LoadCells(Vector3T<int32>());
+
+	for (int i = 0; i < THREAD_COUNT; ++i)
+		_regionLoaders[i].Start();
+
 	WindowEvent e;
 	Frustum cameraFrustum;
 	while (running)
 	{
+		if (deltaSeconds > 0.3f)
+			deltaSeconds = 0.01f;
+
 		timer.Start();
 
 		_inst.Input().ClearMouseInput();
@@ -75,10 +96,19 @@ int Game::Run()
 
 		_player.Update(deltaSeconds);
 		_player.GetProjection().ToFrustum(_player.GetTransform(), cameraFrustum);
-		_window.SetTitle(CSTR("VEngine (", _player.GetTransform().GetPosition(), ") (", _player.GetTransform().GetRotationEuler(), ")"));
+		_window.SetTitle(CSTR("VEngine (", _player.GetTransform().GetPosition(), ") (", _player.GetTransform().GetRotation().GetEuler(), ")"));
+
+		Vector3T<int32> playerCell = (_player.GetTransform().GetPosition() / Cell::SIZE).Floor();
+		if (_region.GetCentreCellCoords() != playerCell)
+		{
+			_region.LoadCells(playerCell);
+
+			for (int i = 0; i < THREAD_COUNT; ++i)
+				_regionLoaders[i].Start();
+		}
 
 		_inst.Debug().Update(deltaSeconds);
-		_inst.GetWorld().Update(cameraFrustum, deltaSeconds);
+		_region.UpdateRenderableCells(cameraFrustum);
 
 		q.Clear();
 
@@ -93,13 +123,16 @@ int Game::Run()
 		_player.ApplyCameraToCurrentProgram();
 
 		tex->Bind(0);
-		_inst.GetWorld().Draw();
-
-		q.Render(ERenderChannels::SURFACE | ERenderChannels::UNLIT, _inst.Meshes(), _inst.Textures(), 0);
+		_region.Draw();
+		
+		q.Render(ERenderChannels::SURFACE | ERenderChannels::UNLIT, &_inst.Meshes(), &_inst.Textures(), 0);
 		_window.SwapBuffers();
 
 		deltaSeconds = timer.SecondsSinceStart();
 	}
+
+	for (int i = 0; i < THREAD_COUNT; ++i)
+		_regionLoaders[i].Stop();
 
 	return 0;
 }

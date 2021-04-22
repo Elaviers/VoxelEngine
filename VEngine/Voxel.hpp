@@ -1,5 +1,4 @@
 #pragma once
-#include "VoxelPos.hpp"
 #include <ELGraphics/Material.hpp>
 #include <ELMaths/Vector3.hpp>
 
@@ -19,5 +18,5 @@ public:
 	Voxel() {}
 
 	void Initialise(const Context&);
-	void RenderSide(const VoxelPos&, Side) const;
+	void RenderSide(const Vector3&, Side) const;
 };

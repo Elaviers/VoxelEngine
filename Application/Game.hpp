@@ -1,5 +1,6 @@
 #pragma once
 #include "Player.hpp"
+#include <VEngine/CellLoader.hpp>
 #include <VEngine/VInstance.hpp>
 #include <ELSys/GLContext.hpp>
 #include <ELSys/GLProgram.hpp>
@@ -14,6 +15,12 @@ private:
 	VInstance _inst;
 
 	Player _player;
+	Region _region;
+
+	static const int THREAD_COUNT = 8;
+	CellLoader _regionLoaders[THREAD_COUNT];
+
+	CellQueue _regionWorkQueue;
 
 	struct shaders_T
 	{
@@ -24,7 +31,7 @@ private:
 	void _Initialise();
 
 public:
-	Game() : _player(_inst.GetWorld()) {}
+	Game() : _player(_inst.GetWorld()), _region(_inst.GetWorld()) {}
 	~Game() {}
 
 	int Run();

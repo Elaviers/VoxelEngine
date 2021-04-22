@@ -5,7 +5,7 @@ Vector2 Maths::PerlinUnitVector(uint32 seed, int32 ix, int32 iy)
 {
 	int32 unique = ix * iy + ix + iy;
 	float rad = Random(seed * unique).NextFloat() * Maths::PI_F * 2.f;
-	return Vector2(Maths::Cosine(rad), Maths::Sine(rad));
+	return Vector2(Maths::Cos(rad), Maths::Sin(rad));
 }
 
 Vector3 Maths::PerlinUnitVector(uint32 seed, int32 ix, int32 iy, int32 iz)
@@ -16,7 +16,7 @@ Vector3 Maths::PerlinUnitVector(uint32 seed, int32 ix, int32 iy, int32 iz)
 	float rad = rand.NextFloat() * Maths::PI_F * 2.f;
 	float z = rand.NextFloat() * 2.f - 1.f;
 	float t = Maths::SquareRoot(1.f - z * z);
-	return Vector3(t * Maths::Cosine(rad), t * Maths::Sine(rad), z);
+	return Vector3(t * Maths::Cos(rad), t * Maths::Sin(rad), z);
 }
 
 inline float pDot(const Vector2& v, uint32 seed, int32 cellX, int32 cellY) 

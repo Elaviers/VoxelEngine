@@ -19,24 +19,32 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Console.cpp" />
+    <ClCompile Include="Cell.cpp" />
+    <ClCompile Include="CellProvider.cpp" />
+    <ClCompile Include="CellQueue.cpp" />
     <ClCompile Include="Maths.cpp" />
+    <ClCompile Include="Region.cpp" />
     <ClCompile Include="VInstance.cpp" />
     <ClCompile Include="Voxel.cpp" />
     <ClCompile Include="VoxelRegistry.cpp" />
     <ClCompile Include="World.cpp" />
+    <ClCompile Include="CellLoader.cpp" />
+    <ClCompile Include="WorldGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Cell.hpp" />
-    <ClInclude Include="Console.hpp" />
-    <ClInclude Include="Maths.hpp" />
+    <ClInclude Include="CellProvider.hpp" />
+    <ClInclude Include="CellQueue.hpp" />
+    <ClInclude Include="CellVertex.hpp" />
+    <ClInclude Include="Region.hpp" />
     <ClInclude Include="Tree3D.hpp" />
+    <ClInclude Include="Cell.hpp" />
+    <ClInclude Include="Maths.hpp" />
     <ClInclude Include="VInstance.hpp" />
     <ClInclude Include="Voxel.hpp" />
-    <ClInclude Include="VoxelPos.hpp" />
     <ClInclude Include="VoxelRegistry.hpp" />
     <ClInclude Include="World.hpp" />
     <ClInclude Include="WorldGenerator.hpp" />
+    <ClInclude Include="CellLoader.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

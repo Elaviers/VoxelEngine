@@ -4,12 +4,12 @@
 
 void Player::Place()
 {
-	_world->Set(_transform.GetPosition(), 1);
+	_world->Set(Vector3T<int32>(_transform.GetPosition()).GetData(), 1);
 }
 
 void Player::Break()
 {
-	_world->Set(_transform.GetPosition(), 0);
+	_world->Set(Vector3T<int32>(_transform.GetPosition()).GetData(), 0);
 }
 
 void Player::Setup(const Context& context)
@@ -26,8 +26,8 @@ void Player::Setup(const Context& context)
 		inputManager->BindKeyAxis(EKeycode::W, &_movementInput.z, 1.f);
 		inputManager->BindKeyAxis(EKeycode::S, &_movementInput.z, -1.f);
 
-		inputManager->BindKeyDown(EKeycode::MOUSE_RIGHT, Callback(this, &Player::Place));
-		inputManager->BindKeyDown(EKeycode::MOUSE_LEFT, Callback(this, &Player::Break));
+		inputManager->BindKeyDown(EKeycode::MOUSE_RIGHT, Callback(*this, &Player::Place));
+		inputManager->BindKeyDown(EKeycode::MOUSE_LEFT, Callback(*this, &Player::Break));
 	}
 	else Debug::Error("No input manager in player setup context! Oh dear!");
 }
@@ -60,6 +60,6 @@ void Player::Update(float deltaSeconds)
 
 void Player::ApplyCameraToCurrentProgram() const
 {
-	GLProgram::Current().SetMatrix4(DefaultUniformVars::mat4View, _transform.GetInverseTransformationMatrix());
+	GLProgram::Current().SetMatrix4(DefaultUniformVars::mat4View, _transform.GetInverseMatrix());
 	GLProgram::Current().SetMatrix4(DefaultUniformVars::mat4Projection, _projection.GetMatrix());
 }

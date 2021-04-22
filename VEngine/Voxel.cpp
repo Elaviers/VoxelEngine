@@ -19,7 +19,7 @@ void Voxel::Initialise(const Context& ctx)
 	_material = materialManager->Get("block", ctx).Ptr();
 }
 
-void Voxel::RenderSide(const VoxelPos& pos, Side side) const
+void Voxel::RenderSide(const Vector3& pos, Side side) const
 {
 	Matrix4 transform;
 	switch (side)
