@@ -1,5 +1,7 @@
 #include "WorldGenerator.hpp"
 
+float halfBlock = 0.5f / (float)Cell::SIZE;
+
 void WorldGenerator::GenerateCell(Cell& cell) const
 {
 	for (int x = 0; x < Cell::SIZE; ++x)
@@ -8,11 +10,11 @@ void WorldGenerator::GenerateCell(Cell& cell) const
 			{
 				float p = Maths::Perlin(_seed,
 					Vector3(
-						cell.GetCoords().x + (float)x / (float)Cell::SIZE,
-						cell.GetCoords().y + (float)y / (float)Cell::SIZE,
-						cell.GetCoords().z + (float)z / (float)Cell::SIZE));
+						cell.GetCoords().x + halfBlock + (float)x / (float)Cell::SIZE,
+						cell.GetCoords().y + halfBlock + (float)y / (float)Cell::SIZE,
+						cell.GetCoords().z + halfBlock + (float)z / (float)Cell::SIZE));
 
-				cell.LazySet(Vector3T<byte>(x, y, z), p < -0.1f);
+				cell.LazySet(Vector3T<byte>(x, y, z), p > 0.2f);
 			}
 
 	cell.MarkGenerated();

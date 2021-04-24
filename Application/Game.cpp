@@ -1,6 +1,10 @@
 #include "Game.hpp"
 #include <ELGraphics/DebugFrustum.hpp>
 #include <ELGraphics/RenderQueue.hpp>
+#include <VEngine/imgui/imgui.h>
+#include <VEngine/imgui/imgui_internal.h>
+#include <VEngine/imgui/imgui_impl_opengl3.h>
+#include <VEngine/imgui/imgui_impl_win32.h>
 
 void Game::_InitialiseGL()
 {
@@ -19,10 +23,20 @@ void Game::_InitialiseGL()
 
 void Game::_Initialise()
 {
+	{
+		WNDCLASSEX windowClass = {};
+		windowClass.cbSize = sizeof(WNDCLASSEX);
+		windowClass.hInstance = ::GetModuleHandle(NULL);
+		windowClass.lpszClassName = "VWindow";
+		windowClass.lpfnWndProc = _WindowProc;
+		windowClass.hIcon = windowClass.hIconSm = ::LoadIcon(NULL, IDI_APPLICATION);
+		::RegisterClassEx(&windowClass);
+	}
+
 	_glContext.CreateDummyAndUse();
 	GL::LoadDummyExtensions();
 
-	_window.Create("VEngine");
+	_window.Create("VWindow", "VEngine");
 	_glContext.Delete();
 
 	_glContext.Create(_window);
@@ -44,6 +58,16 @@ void Game::_Initialise()
 		_regionLoaders[i].SetStride(stride);
 		_regionLoaders[i].SetOffset(i * runLength);
 	}
+
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+
+	ImGui::StyleColorsDark();
+
+	ImGui::GetIO().IniFilename = NULL;
+
+	ImGui_ImplWin32_Init(_window.GetHWND());
+	ImGui_ImplOpenGL3_Init("#version 410");
 }
 
 int Game::Run()
@@ -89,12 +113,28 @@ int Game::Run()
 				_player.UpdateProjection(Vector2T<uint16>(e.data.resize.w, e.data.resize.h));
 				glViewport(0, 0, e.data.resize.w, e.data.resize.h);
 				break;
+
+			case WindowEvent::LEFTMOUSEDOWN:
+				_looking = !_looking;
+				break;
+
+			case WindowEvent::FOCUS_LOST:
+				_looking = false;
+				break;
 			}
 
 			_inst.HandleEvent(e);
 		}
 
-		_player.Update(deltaSeconds);
+		if (_looking)
+		{
+			RECT wr;
+			::GetWindowRect(_window.GetHWND(), &wr);
+			::SetCursorPos((wr.left + wr.right) / 2, (wr.top + wr.bottom) / 2);
+			
+		}
+
+		_player.Update(deltaSeconds, _looking);
 		_player.GetProjection().ToFrustum(_player.GetTransform(), cameraFrustum);
 		_window.SetTitle(CSTR("VEngine (", _player.GetTransform().GetPosition(), ") (", _player.GetTransform().GetRotation().GetEuler(), ")"));
 
@@ -110,6 +150,16 @@ int Game::Run()
 		_inst.Debug().Update(deltaSeconds);
 		_region.UpdateRenderableCells(cameraFrustum);
 
+		{
+			ImGui_ImplOpenGL3_NewFrame();
+			ImGui_ImplWin32_NewFrame();
+			ImGui::NewFrame();
+
+			ImGui::Begin("VEngine");
+
+			ImGui::End();
+		}
+
 		q.Clear();
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -124,6 +174,9 @@ int Game::Run()
 
 		tex->Bind(0);
 		_region.Draw();
+
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		
 		q.Render(ERenderChannels::SURFACE | ERenderChannels::UNLIT, &_inst.Meshes(), &_inst.Textures(), 0);
 		_window.SwapBuffers();
@@ -134,5 +187,28 @@ int Game::Run()
 	for (int i = 0; i < THREAD_COUNT; ++i)
 		_regionLoaders[i].Stop();
 
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+
 	return 0;
+}
+
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+LRESULT CALLBACK Game::_WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+{
+	if (ImGui::GetCurrentContext())
+	{
+		if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam))
+			return TRUE;
+
+		ImGuiIO& io = ImGui::GetIO();
+
+		if (io.WantCaptureMouse && WindowFunctions_Win32::IsMouseInput(msg))
+			return 0;
+		if (io.WantCaptureKeyboard && WindowFunctions_Win32::IsKeyInput(msg))
+			return 0;
+	}
+
+	return WindowFunctions_Win32::WindowProc(hwnd, msg, wparam, lparam);
 }

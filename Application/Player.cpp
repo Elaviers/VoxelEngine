@@ -32,7 +32,7 @@ void Player::Setup(const Context& context)
 	else Debug::Error("No input manager in player setup context! Oh dear!");
 }
 
-void Player::Update(float deltaSeconds)
+void Player::Update(float deltaSeconds, bool looking)
 {
 	constexpr const float sens = .1f;
 	constexpr const float maxSpeed = 30.f;
@@ -53,7 +53,9 @@ void Player::Update(float deltaSeconds)
 		_vel = _vel.Normalised() * maxSpeed;
 
 	_transform.Move(_vel * deltaSeconds);
-	_transform.AddRotation(Vector3(-_lookInput.y * sens, _lookInput.x * sens, 0.f));
+
+	if (looking)
+		_transform.AddRotation(Vector3(-_lookInput.y * sens, _lookInput.x * sens, 0.f));
 }
 
 #include <ELSys/GLProgram.hpp>

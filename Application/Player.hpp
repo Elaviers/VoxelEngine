@@ -36,7 +36,7 @@ public:
 
 	void Setup(const Context& context);
 
-	void Update(float deltaSeconds);
+	void Update(float deltaSeconds, bool looking);
 
 	void ApplyCameraToCurrentProgram() const;
 };

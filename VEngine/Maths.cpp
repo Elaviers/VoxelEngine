@@ -1,6 +1,17 @@
 #include "Maths.hpp"
 #include <ELMaths/Random.hpp>
 
+float _PLerp(float from, float to, float alpha)
+{
+	if (alpha <= 0.f)
+		return from;
+	else if (alpha >= 1.f)
+		return to;
+	
+	alpha = alpha * alpha * alpha * (alpha * (alpha * 6 - 15) + 10);
+	return from + (to - from) * alpha;
+}
+
 Vector2 Maths::PerlinUnitVector(uint32 seed, int32 ix, int32 iy)
 {
 	int32 unique = ix * iy + ix + iy;
@@ -19,49 +30,42 @@ Vector3 Maths::PerlinUnitVector(uint32 seed, int32 ix, int32 iy, int32 iz)
 	return Vector3(t * Maths::Cos(rad), t * Maths::Sin(rad), z);
 }
 
-inline float pDot(const Vector2& v, uint32 seed, int32 cellX, int32 cellY) 
+__forceinline float pDot(const Vector2& v, uint32 seed, int32 cellX, int32 cellY)
 { 
 	return Vector2(v.x - (float)cellX, v.y - (float)cellY).Dot(Maths::PerlinUnitVector(seed, cellX, cellY));
 }
 
-inline float pDot(const Vector3& v, uint32 seed, int32 cellX, int32 cellY, int32 cellZ)
+__forceinline float pDot(const Vector3& v, uint32 seed, int32 cellX, int32 cellY, int32 cellZ)
 {
 	return Vector3(v.x - (float)cellX, v.y - (float)cellY, v.z - (float)cellZ).Dot(Maths::PerlinUnitVector(seed, cellX, cellY, cellZ));
 }
 
 float Maths::Perlin(uint32 seed, const Vector2& v)
 {
-	int32 cellX1 = Maths::Floor(v.x);
-	int32 cellY1 = Maths::Floor(v.y);
-	int32 cellX2 = cellX1 + 1;
-	int32 cellY2 = cellY1 + 1;
-	float wX = v.x - (float)cellX1;
-	float wY = v.y - (float)cellY1;
+	Vector2 floor = v.Floor();
+	Vector2 sub = v - floor;
+	Vector2T<int32> cell = floor;
+	Vector2T<int32> cell2 = cell + 1;
 
-	float x1 = Maths::Lerp(pDot(v, seed, cellX1, cellY1), pDot(v, seed, cellX2, cellY1), wX);
-	float x2 = Maths::Lerp(pDot(v, seed, cellX1, cellY2), pDot(v, seed, cellX2, cellY2), wX);
-	return Maths::Lerp(x1, x2, wY);
+	float x1 = _PLerp(pDot(v, seed, cell.x, cell.y), pDot(v, seed, cell2.x, cell.y), sub.x);
+	float x2 = _PLerp(pDot(v, seed, cell.x, cell2.y), pDot(v, seed, cell2.x, cell2.y), sub.x);
+	return _PLerp(x1, x2, sub.y);
 }
 
 float Maths::Perlin(uint32 seed, const Vector3& v)
 {
-	int32 cellX1 = Maths::Floor(v.x);
-	int32 cellY1 = Maths::Floor(v.y);
-	int32 cellZ1 = Maths::Floor(v.z);
-	int32 cellX2 = cellX1 + 1;
-	int32 cellY2 = cellY1 + 1;
-	int32 cellZ2 = cellZ1 + 1;
-	float wX = v.x - (float)cellX1;
-	float wY = v.y - (float)cellY1;
-	float wZ = v.z - (float)cellZ1;
+	Vector3 floor = v.Floor();
+	Vector3 sub = v - floor;
+	Vector3T<int32> cell = floor;
+	Vector3T<int32> cell2 = cell + 1;
+	
+	float x1 = _PLerp(pDot(v, seed, cell.x, cell.y, cell.z), pDot(v, seed, cell2.x, cell.y, cell.z), sub.x);
+	float x2 = _PLerp(pDot(v, seed, cell.x, cell2.y, cell.z), pDot(v, seed, cell2.x, cell2.y, cell.z), sub.x);
+	float y1 = _PLerp(x1, x2, sub.y);
 
-	float x1 = Maths::Lerp(pDot(v, seed, cellX1, cellY1, cellZ1), pDot(v, seed, cellX2, cellY1, cellZ1), wX);
-	float x2 = Maths::Lerp(pDot(v, seed, cellX1, cellY2, cellZ1), pDot(v, seed, cellX2, cellY2, cellZ1), wX);
-	float y1 = Maths::Lerp(x1, x2, wY);
+	x1 = _PLerp(pDot(v, seed, cell.x, cell.y, cell2.z), pDot(v, seed, cell2.x, cell.y, cell2.z), sub.x);
+	x2 = _PLerp(pDot(v, seed, cell.x, cell2.y, cell2.z), pDot(v, seed, cell2.x, cell2.y, cell2.z), sub.x);
+	float y2 = _PLerp(x1, x2, sub.y);
 
-	x1 = Maths::Lerp(pDot(v, seed, cellX1, cellY1, cellZ2), pDot(v, seed, cellX2, cellY1, cellZ2), wX);
-	x2 = Maths::Lerp(pDot(v, seed, cellX1, cellY2, cellZ2), pDot(v, seed, cellX2, cellY2, cellZ2), wX);
-	float y2 = Maths::Lerp(x1, x2, wY);
-
-	return Maths::Lerp(y1, y2, wZ);
+	return _PLerp(y1, y2, sub.z);
 }
